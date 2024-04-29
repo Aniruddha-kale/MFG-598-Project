@@ -1,0 +1,101 @@
+<!-- The DOCTYPE declaration for HTML5 -->
+<!DOCTYPE html>
+<html>
+<head>
+<!-- CSS styles for the webpage -->
+<style>
+/* Styling for the body of the webpage */
+body {
+  background-color: maroon; 
+  color: yellow; 
+  font-family: Arial, sans-serif; 
+  min-height: 100vh; 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+}
+
+/* Styling for the answers div */
+#answers {
+  background-color: yellow; 
+  color: maroon; 
+  margin-top: 50px; 
+  padding: 20px; 
+  width: 50%; 
+  border-radius: 15px; 
+}
+
+/* Styling for the left and right images */
+#image-left, #image-right {
+  display: block;
+  width: 175px;
+  position: fixed; 
+  top: 50%;
+  transform: translateY(-50%); 
+}
+
+
+#image-left {
+  left: 0; 
+}
+
+
+#image-right {
+  right: 0; 
+}
+</style>
+</head>
+<body>
+
+<!-- Heading for the file upload form -->
+<h2 style="text-align:center;">Upload a TXT File</h2>
+
+<!-- Form for uploading a TXT file -->
+<form id="upload-form" action="/get_answers" method="post" enctype="multipart/form-data" style="text-align:center;">
+  Select a TXT file:
+  <input type="file" id="file" name="file" accept=".txt"><br><br>
+  <input type="submit">
+</form>
+
+<!-- Div for displaying answers -->
+<div id="answers"></div>
+
+<!-- Left and right images -->
+<img id="image-left" src="/static/asu.gif" alt="Your Image">
+<img id="image-right" src="/static/asu.gif" alt="Your Image">
+
+<!-- JavaScript for handling form submission and displaying answers -->
+<script>
+/* Event listener for form submission */
+document.getElementById('upload-form').addEventListener('submit', function(event) {
+  event.preventDefault(); 
+  var formData = new FormData(event.target);
+  var answersDiv = document.getElementById('answers'); 
+  answersDiv.innerHTML = 'Loading... it can take a while.. so relax!!'; 
+  
+  /* Get the file from the form */
+  var file = formData.get('file');
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var questions = e.target.result.split('\n'); /* Split the file content into questions */
+    
+    /* Send a POST request to the /get_answers endpoint with the file data */
+    fetch('/get_answers', {method: 'POST', body: formData})
+      .then(response => response.json()) /* Parse the response as JSON */
+      .then(data => {
+        answersDiv.innerHTML = ''; 
+        for (var i = 0; i < questions.length; i++) { 
+          var p = document.createElement('p'); 
+          
+          /* Set the innerHTML of the paragraph to the question and answer */
+          p.innerHTML = '<strong>' + questions[i] + '</strong>\n- ' + data[i];
+          answersDiv.appendChild(p); 
+        }
+      });
+  };
+  reader.readAsText(file); /* Read the file as text */
+});
+</script>
+
+</body>
+</html>
