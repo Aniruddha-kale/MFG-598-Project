@@ -6,9 +6,11 @@ This project is a web application built with FastAPI, HTML, CSS, and JavaScript.
 ## Installation
 To get this project up and running, follow these steps:
 
-1. Clone this repository: `git clone https://github.com/yourusername/yourrepository.git`
-2. Install the required libraries: `pip install fastapi uvicorn ollama`
-3. Run the server: `uvicorn main:app --reload`
+1. Clone this repository: `git clone https://github.com/Aniruddha-kale/MFG-598-Project.git`
+2. Install Ollama from : `https://ollama.com/download`
+3. Run this command in terminal : `ollama pull llama3`
+4. Install the required libraries: `pip install fastapi uvicorn ollama`
+5. Run the server: `uvicorn main:app --reload`
 
 ## Usage
 To use this application, navigate to `localhost:8000` in your web browser. Click 'Choose File' to select a text file of questions, then click 'Submit'. The answers to your questions will be displayed on the page.
